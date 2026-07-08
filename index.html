@@ -55,11 +55,13 @@
             --receipt-bg: #ffffff;
             --receipt-border: #e2e8f0;
 
-            /* Chat colors — sender = #128C7E, receiver = white/grey */
             --chat-sender-bg: #128C7E;
             --chat-sender-text: #ffffff;
             --chat-receiver-bg: #e8e8e8;
             --chat-receiver-text: #1e293b;
+
+            --approval-badge-bg: #dbeafe;
+            --approval-badge-color: #1d4ed8;
         }
 
         body.dark {
@@ -98,6 +100,9 @@
             --chat-sender-text: #ffffff;
             --chat-receiver-bg: #2a2a2a;
             --chat-receiver-text: #e8e8f0;
+
+            --approval-badge-bg: #1e293b;
+            --approval-badge-color: #60a5fa;
         }
 
         * {
@@ -390,6 +395,18 @@
         .badge-sub-expiring {
             background: rgba(245, 158, 11, 0.15);
             color: #f59e0b;
+        }
+        .badge-approval-pending {
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+        }
+        .badge-approval-approved {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+        }
+        .badge-approval-rejected {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
         }
 
         /* ── TABLES ── */
@@ -1383,7 +1400,6 @@
             flex-direction: column;
             gap: 4px;
         }
-        /* --- CHAT BUBBLE COLORS: Sender = #128C7E, Receiver = white/grey --- */
         .chat-modal .modal-box .chat-messages .msg-bubble {
             max-width: 80%;
             padding: 10px 14px;
@@ -1935,6 +1951,16 @@
         body.dark .btn-print:hover {
             background: #4a4a6e !important;
         }
+
+        /* receipt share button glow */
+        .btn-receipt-share {
+            background: var(--accent-1) !important;
+            color: #fff !important;
+        }
+        .btn-receipt-share:hover {
+            background: #0e6b5f !important;
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
@@ -1974,7 +2000,7 @@
         <div class="page-card">
             <div class="logo-icon"><i class="fas fa-user-plus"></i></div>
             <h2 data-i18n="register_title">Jisajili</h2>
-            <p class="subtitle" data-i18n="register_subtitle">Unda akaunti mpya</p>
+            <p class="subtitle" data-i18n="register_subtitle">Unda akaunti mpya — itahitaji idhini ya Mwenye</p>
             <div class="input-group">
                 <label data-i18n="register_username_label">Jina la Mtumiaji</label>
                 <input type="text" id="regUsername" placeholder="username" />
@@ -1991,7 +2017,7 @@
                 <label data-i18n="register_store_label">Jina la Biashara / Duka</label>
                 <input type="text" id="regStore" placeholder="Jina la duka lako" />
             </div>
-            <button id="registerBtn" class="btn btn-primary btn-block"><i class="fas fa-user-plus"></i> <span data-i18n="register_btn">Jisajili</span></button>
+            <button id="registerBtn" class="btn btn-primary btn-block"><i class="fas fa-user-plus"></i> <span data-i18n="register_btn">Tuma Ombi</span></button>
             <div id="registerError" class="error-msg"></div>
             <div id="registerSuccess" class="success-msg"></div>
             <div class="divider"></div>
@@ -2025,6 +2051,11 @@
                     <i class="fas fa-clipboard-list"></i>
                     <span data-i18n="nav_requests">Maombi ya Stock</span>
                     <span class="notif-badge" id="requestNotifBadge">0</span>
+                </button>
+                <button class="nav-item" data-view="approvals" id="navApprovals">
+                    <i class="fas fa-user-check"></i>
+                    <span data-i18n="nav_approvals">Idhini za Akaunti</span>
+                    <span class="notif-badge" id="approvalNotifBadge">0</span>
                 </button>
                 <button class="nav-item" data-view="reports" id="navReports"><i class="fas fa-file-alt"></i><span data-i18n="nav_reports">Ripoti</span></button>
                 <button class="nav-item" data-view="subscriptions" id="navSubscriptions"><i class="fas fa-credit-card"></i><span data-i18n="nav_subscriptions">Usajili</span></button>
@@ -2222,12 +2253,12 @@
                 login_demo: 'Demo: owner/owner123 · admin/admin123 · accountant/acc123 · employee/emp123',
 
                 register_title: 'Jisajili',
-                register_subtitle: 'Unda akaunti mpya',
+                register_subtitle: 'Unda akaunti mpya — itahitaji idhini ya Mwenye',
                 register_username_label: 'Jina la Mtumiaji',
                 register_password_label: 'Nenosiri',
                 register_confirm_label: 'Thibitisha Nenosiri',
                 register_store_label: 'Jina la Biashara / Duka',
-                register_btn: 'Jisajili',
+                register_btn: 'Tuma Ombi',
                 register_have_account: 'Tayari una akaunti?',
                 register_login_link: 'Ingia',
 
@@ -2239,8 +2270,30 @@
                 nav_users: 'Watumiaji',
                 nav_roles: 'Majukumu',
                 nav_requests: 'Maombi ya Stock',
+                nav_approvals: 'Idhini za Akaunti',
                 nav_reports: 'Ripoti',
                 nav_subscriptions: 'Usajili',
+
+                approvals_title: 'Idhini za Akaunti',
+                approvals_desc: 'Hapa unaweza kuona maombi ya akaunti kutoka kwa wafanyakazi wapya. Kubali au kataa ombi.',
+                approvals_th_name: 'Jina',
+                approvals_th_username: 'Username',
+                approvals_th_store: 'Duka',
+                approvals_th_date: 'Tarehe',
+                approvals_th_status: 'Hali',
+                approvals_th_actions: 'Vitendo',
+                approvals_approve: 'Kubali',
+                approvals_reject: 'Kataa',
+                approvals_approved: 'Imekubaliwa',
+                approvals_rejected: 'Imekataliwa',
+                approvals_pending: 'Inasubiri',
+                approvals_empty: 'Hakuna maombi ya akaunti',
+                approvals_approve_success: 'Akaunti ya {name} imekubaliwa! Mtumiaji anaweza kuingia sasa.',
+                approvals_reject_success: 'Ombi la akaunti ya {name} limekataliwa.',
+                approvals_receipt_title: 'RISITI YA IDHINI YA AKAUNTI',
+                approvals_receipt_sub: 'Hii ni kuthibitisha kuwa akaunti yako imekubaliwa',
+                approvals_receipt_approved: 'IMECHAINIWA NA KUKUBALIWA',
+                approvals_receipt_approver: 'Mwenye Biashara',
 
                 chat_title: 'Mawasiliano',
                 chat_close: 'Funga',
@@ -2461,6 +2514,12 @@
                 toast_company_saved: 'Taarifa za kampuni zimehifadhiwa!',
                 toast_receipt_ready: 'Risiti iko tayari!',
                 toast_whatsapp_sent: 'Risiti imetumwa kwa WhatsApp!',
+                toast_approval_submitted: 'Ombi lako la akaunti limetumwa! Subiri idhini kutoka kwa Mwenye.',
+                toast_approval_pending_exists: 'Tayari una ombi la akaunti linalosubiri. Subiri idhini.',
+                toast_approval_approved: 'Akaunti yako imekubaliwa! Sasa unaweza kuingia.',
+                toast_approval_rejected: 'Ombi lako la akaunti limekataliwa. Wasiliana na Mwenye.',
+                toast_approval_owner_approved: 'Akaunti ya {name} imekubaliwa!',
+                toast_approval_owner_rejected: 'Ombi la akaunti ya {name} limekataliwa.',
 
                 sub_title: 'Lipa Usajili wa Mwenye',
                 sub_desc: 'Lipa 45,000 Tsh kwa mwezi kuendelea kutumia mfumo',
@@ -2520,6 +2579,7 @@
                 receipt_vat: 'VAT (18%)',
                 receipt_grand_total: 'Jumla Kuu',
                 receipt_efd_note: 'Risiti hii ni halali kwa malipo yote',
+                receipt_share_btn: 'Shiriki Risiti',
             },
             en: {
                 login_subtitle: 'Login to your system',
@@ -2531,12 +2591,12 @@
                 login_demo: 'Demo: owner/owner123 · admin/admin123 · accountant/acc123 · employee/emp123',
 
                 register_title: 'Register',
-                register_subtitle: 'Create a new account',
+                register_subtitle: 'Create a new account — it needs Owner approval',
                 register_username_label: 'Username',
                 register_password_label: 'Password',
                 register_confirm_label: 'Confirm Password',
                 register_store_label: 'Business / Store Name',
-                register_btn: 'Register',
+                register_btn: 'Submit Request',
                 register_have_account: 'Already have an account?',
                 register_login_link: 'Login',
 
@@ -2548,8 +2608,30 @@
                 nav_users: 'Users',
                 nav_roles: 'Roles',
                 nav_requests: 'Stock Requests',
+                nav_approvals: 'Account Approvals',
                 nav_reports: 'Reports',
                 nav_subscriptions: 'Subscriptions',
+
+                approvals_title: 'Account Approvals',
+                approvals_desc: 'Here you can see account requests from new workers. Approve or reject the request.',
+                approvals_th_name: 'Name',
+                approvals_th_username: 'Username',
+                approvals_th_store: 'Store',
+                approvals_th_date: 'Date',
+                approvals_th_status: 'Status',
+                approvals_th_actions: 'Actions',
+                approvals_approve: 'Approve',
+                approvals_reject: 'Reject',
+                approvals_approved: 'Approved',
+                approvals_rejected: 'Rejected',
+                approvals_pending: 'Pending',
+                approvals_empty: 'No account requests',
+                approvals_approve_success: 'Account for {name} approved! User can now login.',
+                approvals_reject_success: 'Account request for {name} rejected.',
+                approvals_receipt_title: 'ACCOUNT APPROVAL RECEIPT',
+                approvals_receipt_sub: 'This confirms that your account has been approved',
+                approvals_receipt_approved: 'APPROVED & CONFIRMED',
+                approvals_receipt_approver: 'Business Owner',
 
                 chat_title: 'Communication',
                 chat_close: 'Close',
@@ -2770,6 +2852,12 @@
                 toast_company_saved: 'Company settings saved!',
                 toast_receipt_ready: 'Receipt is ready!',
                 toast_whatsapp_sent: 'Receipt sent via WhatsApp!',
+                toast_approval_submitted: 'Your account request has been submitted! Wait for Owner approval.',
+                toast_approval_pending_exists: 'You already have a pending account request. Wait for approval.',
+                toast_approval_approved: 'Your account has been approved! You can now login.',
+                toast_approval_rejected: 'Your account request has been rejected. Contact the Owner.',
+                toast_approval_owner_approved: 'Account for {name} approved!',
+                toast_approval_owner_rejected: 'Account request for {name} rejected.',
 
                 sub_title: 'Owner Subscription',
                 sub_desc: 'Pay 45,000 Tsh per month to continue using the system',
@@ -2829,6 +2917,7 @@
                 receipt_vat: 'VAT (18%)',
                 receipt_grand_total: 'Grand Total',
                 receipt_efd_note: 'This receipt is valid for all payments',
+                receipt_share_btn: 'Share Receipt',
             }
         };
 
@@ -2865,6 +2954,7 @@
                     users: t('nav_users'),
                     roles: t('nav_roles'),
                     requests: t('nav_requests'),
+                    approvals: t('nav_approvals'),
                     reports: t('nav_reports'),
                     subscriptions: t('nav_subscriptions')
                 };
@@ -3036,6 +3126,18 @@
                     status: 'pending', timestamp: Date.now() - 3600000 * 1, parentId: 103 },
             ];
 
+            const accountApprovals = [{
+                id: 9001,
+                username: 'new_employee',
+                password: 'emp123',
+                fullName: 'Mfanyakazi Mpya',
+                store: 'Duka la Mfanyakazi',
+                role: 'employee',
+                status: 'pending',
+                timestamp: Date.now() - 3600000 * 3,
+                receipt: null
+            }];
+
             DB.set('users', users);
             DB.set('products', allProducts);
             DB.set('sales', sales);
@@ -3044,6 +3146,7 @@
             DB.set('ceo', ceo);
             DB.set('company', company);
             DB.set('requests', requests);
+            DB.set('accountApprovals', accountApprovals);
             DB.set('seeded', true);
         }
         seedDatabase();
@@ -3108,6 +3211,11 @@
             return u && ['owner', 'admin'].includes(u.role);
         }
 
+        function canManageApprovals() {
+            const u = currentUser();
+            return u && u.role === 'owner';
+        }
+
         function getRoleLabel(r) {
             const map = {
                 owner: t('role_owner'),
@@ -3160,12 +3268,11 @@
             const user = currentUser();
             if (!user) return [];
             if (user.role === 'owner') return products.filter(p => p.store === 'Duku Kuu' || p.parentId === undefined);
-            // For admin, accountant, employee: show products from their store or all if no store
             if (user.store) {
                 const storeProducts = products.filter(p => p.store === user.store);
                 if (storeProducts.length > 0) return storeProducts;
             }
-            return products; // fallback to all products
+            return products;
         }
 
         function getFilteredExpenses() {
@@ -3178,7 +3285,6 @@
                 const storeUsers = users.filter(u => u.store === user.store || u.id === user.id).map(u => u.id);
                 return expenses.filter(e => storeUsers.includes(e.createdBy));
             }
-            // Employees and accountants see only their own expenses
             return expenses.filter(e => e.createdBy === user.id);
         }
 
@@ -3288,12 +3394,10 @@
                     return { success: false };
                 }
 
-                // Deduct from owner's stock
                 ownerProduct.quantity -= req.quantity;
                 showToast(t('toast_stock_decreased').replace('{qty}', req.quantity).replace('{product}', ownerProduct
                     .name), 'info');
 
-                // Add to employee's product
                 employeeProduct.quantity += req.quantity;
 
                 DB.set('products', products);
@@ -3358,6 +3462,118 @@
         function getPendingRequestsCount() {
             const requests = getRequests();
             return requests.filter(r => r.status === 'pending').length;
+        }
+
+        // ── Account Approvals ──
+        function getAccountApprovals() { return DB.get('accountApprovals', []); }
+
+        function saveAccountApprovals(arr) { DB.set('accountApprovals', arr); }
+
+        function createAccountApproval(username, password, fullName, store, role = 'employee') {
+            const approvals = getAccountApprovals();
+            const existing = approvals.find(a => a.username === username && a.status === 'pending');
+            if (existing) return { success: false, msg: t('toast_approval_pending_exists') };
+
+            const users = DB.get('users', []);
+            if (users.find(u => u.username === username)) {
+                return { success: false, msg: t('toast_username_taken') };
+            }
+
+            const approval = {
+                id: uid(),
+                username,
+                password,
+                fullName: fullName || username,
+                store: store || 'Duka',
+                role: role,
+                status: 'pending',
+                timestamp: Date.now(),
+                receipt: null
+            };
+            approvals.push(approval);
+            saveAccountApprovals(approvals);
+            return { success: true, approval };
+        }
+
+        function approveAccountApproval(approvalId) {
+            const approvals = getAccountApprovals();
+            const idx = approvals.findIndex(a => String(a.id) === String(approvalId));
+            if (idx === -1) return { success: false, msg: 'Approval not found' };
+            const app = approvals[idx];
+            if (app.status !== 'pending') return { success: false, msg: 'Already processed' };
+
+            const users = DB.get('users', []);
+            if (users.find(u => u.username === app.username)) {
+                app.status = 'rejected';
+                saveAccountApprovals(approvals);
+                return { success: false, msg: t('toast_username_taken') };
+            }
+
+            const now = Date.now();
+            const oneMonth = 30 * 24 * 60 * 60 * 1000;
+            const newUser = {
+                id: uid(),
+                username: app.username,
+                password: app.password,
+                role: app.role || 'employee',
+                store: app.store || 'Duka',
+                fullName: app.fullName || app.username,
+                email: '',
+                createdBy: currentUser()?.id || 1,
+                photo: '',
+                subscription: { active: true, expiry: now + oneMonth * 1200, paidAmount: 0, paymentDate: now }
+            };
+            users.push(newUser);
+            DB.set('users', users);
+
+            const receiptId = 'ACC-' + String(app.id).padStart(6, '0');
+            const receipt = {
+                id: receiptId,
+                username: app.username,
+                fullName: app.fullName || app.username,
+                store: app.store || 'Duka',
+                role: app.role || 'employee',
+                approvedBy: currentUser()?.fullName || currentUser()?.username || 'Owner',
+                approvedAt: Date.now(),
+                approverId: currentUser()?.id || 1
+            };
+
+            app.status = 'approved';
+            app.receipt = receipt;
+            saveAccountApprovals(approvals);
+
+            const owner = currentUser();
+            if (owner) {
+                const msgs = getMessages();
+                msgs.push({
+                    id: uid(),
+                    from: owner.id,
+                    to: newUser.id,
+                    text: `🎉 Akaunti yako imekubaliwa! Sasa unaweza kuingia kwenye mfumo. Karibu ${newUser.fullName}!`,
+                    isTask: false,
+                    timestamp: Date.now(),
+                    read: false
+                });
+                saveMessages(msgs);
+            }
+
+            return { success: true, user: newUser, receipt };
+        }
+
+        function rejectAccountApproval(approvalId) {
+            const approvals = getAccountApprovals();
+            const idx = approvals.findIndex(a => String(a.id) === String(approvalId));
+            if (idx === -1) return { success: false, msg: 'Approval not found' };
+            const app = approvals[idx];
+            if (app.status !== 'pending') return { success: false, msg: 'Already processed' };
+            app.status = 'rejected';
+            saveAccountApprovals(approvals);
+            return { success: true };
+        }
+
+        function getPendingApprovalsCount() {
+            const approvals = getAccountApprovals();
+            return approvals.filter(a => a.status === 'pending').length;
         }
 
         // ── Chat helpers ──
@@ -3636,7 +3852,7 @@
         }
 
         // ================================================================
-        //  EFD RECEIPT FUNCTIONS — FIXED
+        //  EFD RECEIPT FUNCTIONS — FULLY WORKING
         // ================================================================
 
         let currentReceiptData = null;
@@ -3786,9 +4002,10 @@
                 return;
             }
             showToast(t('toast_receipt_print'), 'info');
+            // Use setTimeout to allow the toast to show before print dialog
             setTimeout(function() {
                 window.print();
-            }, 500);
+            }, 300);
         }
 
         // ── Send Receipt via WhatsApp ──
@@ -3819,17 +4036,24 @@
                 const url = `https://wa.me/${number}?text=${encoded}`;
                 window.open(url, '_blank');
                 showToast(t('toast_whatsapp_sent'), 'success');
-            }, 600);
+            }, 500);
         }
 
         // ── Setup receipt modal event listeners ──
         document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('printReceiptBtn')?.addEventListener('click', printReceipt);
-            document.getElementById('sendReceiptWhatsAppBtn')?.addEventListener('click', sendReceiptWhatsApp);
-            document.getElementById('closeReceiptBtn')?.addEventListener('click', closeReceiptModal);
-            document.getElementById('receiptModal')?.addEventListener('click', function(e) {
-                if (e.target === this) closeReceiptModal();
-            });
+            const printBtn = document.getElementById('printReceiptBtn');
+            const sendBtn = document.getElementById('sendReceiptWhatsAppBtn');
+            const closeBtn = document.getElementById('closeReceiptBtn');
+            const modal = document.getElementById('receiptModal');
+
+            if (printBtn) printBtn.addEventListener('click', printReceipt);
+            if (sendBtn) sendBtn.addEventListener('click', sendReceiptWhatsApp);
+            if (closeBtn) closeBtn.addEventListener('click', closeReceiptModal);
+            if (modal) {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) closeReceiptModal();
+                });
+            }
         });
 
         function shareReceipt(saleId) {
@@ -3837,7 +4061,7 @@
         }
 
         // ================================================================
-        //  CHAT UI — Sender = #128C7E, Receiver = white/grey
+        //  CHAT UI
         // ================================================================
 
         let chatCurrentContact = null;
@@ -4147,6 +4371,7 @@
             document.getElementById('modalProfilePreview').src = photo;
 
             updateRequestBadge();
+            updateApprovalBadge();
         }
 
         function updateRequestBadge() {
@@ -4162,6 +4387,27 @@
             }
 
             const pendingCount = getPendingRequestsCount();
+            if (pendingCount > 0) {
+                badge.textContent = pendingCount > 99 ? '99+' : pendingCount;
+                badge.classList.add('show');
+            } else {
+                badge.classList.remove('show');
+            }
+        }
+
+        function updateApprovalBadge() {
+            const user = currentUser();
+            if (!user) return;
+
+            const badge = document.getElementById('approvalNotifBadge');
+            if (!badge) return;
+
+            if (!canManageApprovals()) {
+                badge.classList.remove('show');
+                return;
+            }
+
+            const pendingCount = getPendingApprovalsCount();
             if (pendingCount > 0) {
                 badge.textContent = pendingCount > 99 ? '99+' : pendingCount;
                 badge.classList.add('show');
@@ -4577,7 +4823,7 @@
                                                     <td>${s.store || '--'}</td>
                                                     <td style="display:flex;gap:4px;flex-wrap:wrap;">
                                                         ${canEdit ? `<button class="btn btn-danger btn-xs" onclick="deleteSale('${s.id}')"><i class="fas fa-trash"></i></button>` : ''}
-                                                        <button class="btn btn-primary btn-xs" onclick="shareReceipt('${s.id}')"><i class="fas fa-receipt"></i> <i class="fas fa-share-alt" style="font-size:0.6rem;"></i></button>
+                                                        <button class="btn btn-receipt-share btn-xs" onclick="shareReceipt('${s.id}')" title="${t('receipt_share')}"><i class="fas fa-receipt"></i> <i class="fas fa-share-alt" style="font-size:0.6rem;"></i></button>
                                                     </td>
                                                 </tr>`;
                                             }).join('')}
@@ -4589,12 +4835,11 @@
                     `;
         };
 
-        // ── INVENTORY ── (All non-owner roles can request stock)
+        // ── INVENTORY ──
         views.inventory = function() {
             const products = getFilteredProducts();
             const user = currentUser();
             const canEdit = ['owner', 'admin', 'accountant'].includes(user.role);
-            // All users except owner can request stock
             const canRequest = user && user.role !== 'owner';
 
             return `
@@ -4688,6 +4933,154 @@
                     `;
         };
 
+        // ── ACCOUNT APPROVALS ──
+        views.approvals = function() {
+            if (!canManageApprovals()) {
+                return `<div class="card"><div class="card-body"><p class="text-muted"><i class="fas fa-lock"></i> ${t('toast_owner_only')}</p></div></div>`;
+            }
+
+            const approvals = getAccountApprovals();
+            const user = currentUser();
+
+            return `
+                        <div class="section-header">
+                            <h2><i class="fas fa-user-check" style="color:var(--accent-2)"></i> ${t('approvals_title')}</h2>
+                            ${getPendingApprovalsCount() > 0 ? `<span class="badge badge-danger" style="font-size:0.9rem;padding:6px 16px;"><i class="fas fa-circle" style="color:red;font-size:0.6rem;margin-right:6px;"></i> ${getPendingApprovalsCount()} inasubiri</span>` : ''}
+                        </div>
+
+                        <div class="card">
+                            <div class="card-body">
+                                <p class="text-muted text-sm mb-16">${t('approvals_desc')}</p>
+                                <div class="table-wrap">
+                                    <table>
+                                        <thead><tr><th>#</th><th>${t('approvals_th_name')}</th><th>${t('approvals_th_username')}</th><th>${t('approvals_th_store')}</th><th>${t('approvals_th_date')}</th><th>${t('approvals_th_status')}</th><th>${t('approvals_th_actions')}</th></tr></thead>
+                                        <tbody>
+                                            ${approvals.length === 0 ? '<tr class="empty-row"><td colspan="7">' + t('approvals_empty') + '</td></tr>' :
+                                            approvals.map((a, i) => {
+                                                const statusLabel = a.status === 'pending' ? t('approvals_pending') : a.status === 'approved' ? t('approvals_approved') : t('approvals_rejected');
+                                                const statusBadge = a.status === 'pending' ? 'badge-approval-pending' : a.status === 'approved' ? 'badge-approval-approved' : 'badge-approval-rejected';
+                                                const actions = a.status === 'pending' ?
+                                                    `<button class="btn btn-success btn-xs" onclick="approveAccount('${a.id}')"><i class="fas fa-check"></i> ${t('approvals_approve')}</button>
+                                                     <button class="btn btn-danger btn-xs" onclick="rejectAccount('${a.id}')"><i class="fas fa-times"></i> ${t('approvals_reject')}</button>` :
+                                                    a.status === 'approved' && a.receipt ?
+                                                    `<button class="btn btn-receipt-share btn-xs" onclick="showApprovalReceipt('${a.id}')"><i class="fas fa-receipt"></i> <i class="fas fa-share-alt" style="font-size:0.6rem;"></i></button>` :
+                                                    '';
+                                                return `<tr>
+                                                    <td>${i + 1}</td>
+                                                    <td>${a.fullName || a.username}</td>
+                                                    <td>${a.username}</td>
+                                                    <td>${a.store || '--'}</td>
+                                                    <td>${fmtDate(a.timestamp)}</td>
+                                                    <td><span class="badge ${statusBadge}">${statusLabel}</span></td>
+                                                    <td>${actions}</td>
+                                                </tr>`;
+                                            }).join('')}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+        };
+
+        // ── Show Approval Receipt ──
+        function showApprovalReceipt(approvalId) {
+            const approvals = getAccountApprovals();
+            const a = approvals.find(x => String(x.id) === String(approvalId));
+            if (!a || !a.receipt) {
+                showToast(t('toast_error'), 'error');
+                return;
+            }
+            const receipt = a.receipt;
+            const company = getCompanySettings();
+
+            const html = `
+                        <div class="receipt-header">
+                            <div class="receipt-brand">${company.name || 'RB CAUSTIC SODA LTD'}</div>
+                            <div class="receipt-sub">${t('approvals_receipt_title')}</div>
+                            <div class="receipt-number">${t('receipt_number')}: ${receipt.id}</div>
+                        </div>
+
+                        <div class="receipt-row">
+                            <span class="label">${t('approvals_th_name')}:</span>
+                            <span class="value">${receipt.fullName}</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span class="label">${t('approvals_th_username')}:</span>
+                            <span class="value">${receipt.username}</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span class="label">${t('approvals_th_store')}:</span>
+                            <span class="value">${receipt.store || '--'}</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span class="label">Nafasi:</span>
+                            <span class="value">${getRoleLabel(receipt.role)}</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span class="label">${t('approvals_receipt_approver')}:</span>
+                            <span class="value">${receipt.approvedBy}</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span class="label">Tarehe ya Idhini:</span>
+                            <span class="value">${fmtDateTime(receipt.approvedAt)}</span>
+                        </div>
+
+                        <div class="receipt-divider"></div>
+
+                        <div style="text-align:center;padding:12px 0;font-size:1.1rem;font-weight:800;color:var(--accent-4);">
+                            ✅ ${t('approvals_receipt_approved')}
+                        </div>
+
+                        <div class="receipt-footer">
+                            ${t('approvals_receipt_sub')}
+                            <div class="efd-note">${t('receipt_efd_note')}</div>
+                        </div>
+                    `;
+
+            document.getElementById('receiptContent').innerHTML = html;
+            document.getElementById('receiptWhatsAppNumber').value = '0713381496';
+            document.getElementById('receiptModal').classList.add('show');
+            document.body.classList.add('modal-open');
+            applyTranslations();
+            showToast('Risiti ya idhini iko tayari!', 'success');
+        }
+
+        // ── Approve Account ──
+        function approveAccount(approvalId) {
+            if (!confirm('Je, una uhakika wa kukubali ombi hili la akaunti?')) return;
+
+            const result = approveAccountApproval(approvalId);
+            if (!result.success) {
+                showToast(result.msg || t('toast_approve_fail'), 'error');
+                return;
+            }
+
+            const name = result.user?.fullName || result.user?.username || 'Mtumiaji';
+            showToast(t('toast_approval_owner_approved').replace('{name}', name), 'success');
+            updateApprovalBadge();
+            navigate('approvals');
+        }
+
+        // ── Reject Account ──
+        function rejectAccount(approvalId) {
+            if (!confirm('Je, una uhakika wa kukataa ombi hili la akaunti?')) return;
+
+            const approvals = getAccountApprovals();
+            const a = approvals.find(x => String(x.id) === String(approvalId));
+            const name = a?.fullName || a?.username || 'Mtumiaji';
+
+            const result = rejectAccountApproval(approvalId);
+            if (!result.success) {
+                showToast(result.msg || t('toast_approve_fail'), 'error');
+                return;
+            }
+
+            showToast(t('toast_approval_owner_rejected').replace('{name}', name), 'info');
+            updateApprovalBadge();
+            navigate('approvals');
+        }
+
         // ── P&L ──
         views.pnl = function() {
             const pnl = calculatePnL();
@@ -4770,10 +5163,9 @@
                     `;
         };
 
-        // ── EXPENSES ── (All users can add expenses)
+        // ── EXPENSES ──
         views.expenses = function() {
             const expenses = getFilteredExpenses();
-            const canEdit = true;
 
             return `
                         <div class="section-header">
@@ -5027,7 +5419,6 @@
                 return `<div class="card"><div class="card-body"><p class="text-muted">${t('subs_owner_only')}</p></div></div>`;
             }
 
-            const subStatus = getSubscriptionStatus(owner);
             const isActive = isSubscriptionActive(owner);
             const expiryText = owner.subscription?.expiry ? fmtDate(owner.subscription.expiry) : t('sub_never');
             const statusText = isActive ? '✅ ' + t('subs_active') : '❌ ' + t('subs_not_paid');
@@ -5104,6 +5495,10 @@
                 showToast(t('toast_unauthorized'), 'error');
                 return;
             }
+            if (view === 'approvals' && !canManageApprovals()) {
+                showToast(t('toast_owner_only'), 'error');
+                return;
+            }
             if (view === 'subscriptions' && !canManageUsers()) {
                 showToast(t('toast_unauthorized'), 'error');
                 return;
@@ -5122,6 +5517,7 @@
                 users: t('nav_users'),
                 roles: t('nav_roles'),
                 requests: t('nav_requests'),
+                approvals: t('nav_approvals'),
                 reports: t('nav_reports'),
                 subscriptions: t('nav_subscriptions')
             };
@@ -5170,6 +5566,7 @@
 
             applyTranslations();
             updateRequestBadge();
+            updateApprovalBadge();
         }
 
         // ================================================================
@@ -5761,34 +6158,49 @@
             }
 
             const isFirst = users.length === 0;
-            const role = isFirst ? 'owner' : 'admin';
-            const now = Date.now();
-            const oneMonth = 30 * 24 * 60 * 60 * 1000;
-            const newUser = {
-                id: uid(),
-                username,
-                password,
-                role,
-                store: isFirst ? store : store,
-                fullName: username,
-                email: '',
-                createdBy: isFirst ? null : 1,
-                photo: '',
-                subscription: isFirst ? { active: true, expiry: now + oneMonth * 12, paidAmount: 540000,
-                        paymentDate: now } : { active: true, expiry: now + oneMonth * 1200,
-                        paidAmount: 0, paymentDate: now }
-            };
-            users.push(newUser);
-            DB.set('users', users);
 
-            sucEl.innerHTML = '<i class="fas fa-check-circle"></i> Akaunti imeundwa!';
+            if (isFirst) {
+                const now = Date.now();
+                const oneMonth = 30 * 24 * 60 * 60 * 1000;
+                const newUser = {
+                    id: uid(),
+                    username,
+                    password,
+                    role: 'owner',
+                    store: store,
+                    fullName: username,
+                    email: '',
+                    createdBy: null,
+                    photo: '',
+                    subscription: { active: true, expiry: now + oneMonth * 12, paidAmount: 540000,
+                        paymentDate: now }
+                };
+                users.push(newUser);
+                DB.set('users', users);
+                sucEl.innerHTML = '<i class="fas fa-check-circle"></i> Akaunti ya Mwenye imeundwa! Ingia sasa.';
+                setTimeout(function() {
+                    document.getElementById('registerPage').classList.add('hidden');
+                    document.getElementById('loginPage').classList.remove('hidden');
+                    document.getElementById('loginUsername').value = username;
+                    document.getElementById('loginError').textContent = 'Akaunti imeundwa! Ingia sasa.';
+                }, 1000);
+                return;
+            }
 
+            const result = createAccountApproval(username, password, username, store, 'employee');
+            if (!result.success) {
+                errEl.textContent = result.msg || t('toast_error');
+                return;
+            }
+
+            sucEl.innerHTML = '<i class="fas fa-check-circle"></i> Ombi lako limepelekwa kwa Mwenye! Subiri idhini.';
             setTimeout(function() {
                 document.getElementById('registerPage').classList.add('hidden');
                 document.getElementById('loginPage').classList.remove('hidden');
                 document.getElementById('loginUsername').value = username;
-                document.getElementById('loginError').textContent = 'Akaunti imeundwa! Ingia sasa.';
-            }, 1000);
+                document.getElementById('loginError').textContent = 'Ombi limepelekwa! Subiri idhini kutoka kwa Mwenye.';
+                updateApprovalBadge();
+            }, 1500);
         });
 
         // ── Subscription payment event handlers ──
@@ -5930,6 +6342,7 @@
             document.getElementById('navUsers').style.display = canManageUsers() ? 'flex' : 'none';
             document.getElementById('navRoles').style.display = canManageRoles() ? 'flex' : 'none';
             document.getElementById('navRequests').style.display = canManageRequests() ? 'flex' : 'none';
+            document.getElementById('navApprovals').style.display = canManageApprovals() ? 'flex' : 'none';
             document.getElementById('navReports').style.display = 'flex';
             document.getElementById('navSubscriptions').style.display = canManageUsers() ? 'flex' : 'none';
 
@@ -5945,6 +6358,7 @@
             navigate('dashboard');
             updateChatBadge();
             updateRequestBadge();
+            updateApprovalBadge();
 
             setInterval(function() {
                 const user = currentUser();
@@ -5958,6 +6372,13 @@
                 if (badge) {
                     const currentBadge = parseInt(badge.textContent) || 0;
                     if (pending !== currentBadge) updateRequestBadge();
+                }
+
+                const pendingApprovals = getPendingApprovalsCount();
+                const approvalBadge = document.getElementById('approvalNotifBadge');
+                if (approvalBadge) {
+                    const currentApprovalBadge = parseInt(approvalBadge.textContent) || 0;
+                    if (pendingApprovals !== currentApprovalBadge) updateApprovalBadge();
                 }
 
                 if (document.getElementById('chatModal').classList.contains('show')) {
@@ -5981,7 +6402,7 @@
         }
 
         // ================================================================
-        //  AUTO-LOGIN — Owner requires password
+        //  AUTO-LOGIN
         // ================================================================
 
         (function autoLogin() {
@@ -6044,9 +6465,11 @@
         console.log('🔐 Owner Login: Inahitaji nenosiri — hakuna auto-login.');
         console.log('📊 WhatsApp Report: Inaonyesha muuzaji, maoni na ushauri.');
         console.log('✅ Stock Request: Owner stock inapungua, employee stock inaongezeka.');
+        console.log('✅ Account Approvals: Wafanyakazi wapya wanaomba akaunti, Mwenye anakubali/kataa.');
+        console.log('✅ Receipt Button: Inafanya kazi kikamilifu — chapisha na tuma WhatsApp.');
 
         // ================================================================
-        //  GLOBAL EXPOSURE FOR INLINE ONCLICK
+        //  GLOBAL EXPOSURE
         // ================================================================
 
         window.openModal = openModal;
@@ -6060,6 +6483,9 @@
         window.submitRequest = submitRequest;
         window.approveRequest = approveRequest;
         window.rejectRequest = rejectRequest;
+        window.approveAccount = approveAccount;
+        window.rejectAccount = rejectAccount;
+        window.showApprovalReceipt = showApprovalReceipt;
         window.deleteSale = deleteSale;
         window.deleteExpense = deleteExpense;
         window.deleteProduct = deleteProduct;
