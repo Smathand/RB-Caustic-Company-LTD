@@ -6136,12 +6136,13 @@
         }
 
         // ================================================================
-        //  DELETE ACTIONS
+        //  DELETE ACTIONS (FIXED: convert id to number for proper comparison)
         // ================================================================
 
         function deleteSale(id) {
             if (!confirm('Je, una uhakika wa kufuta mauzo haya?')) return;
-            const sales = DB.get('sales', []).filter(s => s.id !== id);
+            const numericId = Number(id);
+            const sales = DB.get('sales', []).filter(s => s.id !== numericId);
             DB.set('sales', sales);
             showToast(t('toast_deleted'), 'info');
             navigate('sales');
@@ -6149,7 +6150,7 @@
 
         function deleteExpense(id) {
             const expenses = DB.get('expenses', []);
-            const expense = expenses.find(e => e.id === id);
+            const expense = expenses.find(e => e.id === Number(id));
             if (!expense) {
                 showToast(t('toast_error'), 'error');
                 return;
@@ -6160,7 +6161,7 @@
                 return;
             }
             if (!confirm('Je, una uhakika wa kufuta matumizi haya?')) return;
-            const newExpenses = expenses.filter(e => e.id !== id);
+            const newExpenses = expenses.filter(e => e.id !== Number(id));
             DB.set('expenses', newExpenses);
             showToast(t('toast_deleted'), 'info');
             navigate('expenses');
@@ -6168,14 +6169,15 @@
 
         function deleteProduct(id) {
             if (!confirm('Je, una uhakika wa kufuta bidhaa hii?')) return;
-            const products = DB.get('products', []).filter(p => p.id !== id);
+            const numericId = Number(id);
+            const products = DB.get('products', []).filter(p => p.id !== numericId);
             DB.set('products', products);
             showToast(t('toast_deleted'), 'info');
             navigate('inventory');
         }
 
         function deleteUser(id) {
-            const user = getUser(id);
+            const user = getUser(Number(id));
             if (!user) return;
             if (user.role === 'owner') {
                 showToast('Huwezi kufuta mwenye (owner)', 'error');
@@ -6187,7 +6189,7 @@
             }
             if (!confirm('Je, una uhakika wa kufuta mtumiaji "' + user.username + '"?')) return;
 
-            const users = DB.get('users', []).filter(u => u.id !== id);
+            const users = DB.get('users', []).filter(u => u.id !== Number(id));
             DB.set('users', users);
             showToast(t('toast_deleted'), 'info');
             navigate('users');
@@ -6195,7 +6197,7 @@
 
         function changeUserRole(userId, newRole) {
             const users = DB.get('users', []);
-            const u = users.find(x => x.id === userId);
+            const u = users.find(x => x.id === Number(userId));
             if (!u) { showToast(t('toast_product_not_found'), 'error'); return; }
             if (u.role === 'owner') { showToast('Huwezi kubadilisha nafasi ya mwenye', 'error'); return; }
             u.role = newRole;
