@@ -3079,7 +3079,7 @@
                 username: 'employee',
                 password: 'emp123',
                 role: 'employee',
-                store: 'Senta ya Mfanyakazi',
+                store: 'Duka la Mfanyakazi',
                 fullName: 'Mfanyakazi Alpha',
                 email: 'emp@biz.com',
                 createdBy: 2,
@@ -3088,37 +3088,46 @@
                     paymentDate: null }
             }, ];
 
+            // ============================================================
+            //  CAUSTIC SODA PRODUCTS  (instead of computer/electronics)
+            // ============================================================
             const products = [
-                { id: 101, name: 'Caustic Drops ', description: 'Caustic Soda Drops', price: 1200000, cost: 950000,
-                    quantity: 14, category: 'Industrial Products', store: 'Ofisi Kuu Kuu' },
-                { id: 102, name: 'Caustic Soda Peals', description: 'Caustic Soda Peal', price: 85000, cost: 55000,
-                    quantity: 32, category: 'Vifaa', store: 'Ofisi Kuu' },
-                { id: 103, name: 'Caustic Soda Flakes', description: 'Caustic Soda Flakes', price: 35000, cost: 20000,
-                    quantity: 45, category: 'Vifaa', store: 'Ofisi Kuu' },
-                { id: 104, name: 'Caustic Soda Other Products', description: 'New Products', price: 450000, cost: 320000,
-                    quantity: 8, category: 'Elektroniki', store: 'Ofisi Kuu' },
-                { id: 105, name: 'Caustic soda ', description: 'Other Products', price: 680000, cost: 500000,
-                    quantity: 5, category: 'Elektroniki', store: 'Ofisi Kuu' },
-                { id: 106, name: 'Caustic Soda Flakes', description: 'Other Products', price: 250000, cost: 180000,
-                    quantity: 12, category: 'Industrial Products', store: 'Ofisi Kuu' },
+                { id: 101, name: 'Caustic Soda Flakes 50kg', description: 'Soda kaustiki flakes 50kg',
+                    price: 180000, cost: 130000, quantity: 50, category: 'Bidhaa za Viwandani',
+                    store: 'Ofisi Kuu' },
+                { id: 102, name: 'Caustic Soda Pearls 25kg', description: 'Soda kaustiki pearli 25kg',
+                    price: 95000, cost: 65000, quantity: 80, category: 'Bidhaa za Viwandani',
+                    store: 'Ofisi Kuu' },
+                { id: 103, name: 'Caustic Soda Liquid 20L', description: 'Soda kaustiki kioevu 20L',
+                    price: 45000, cost: 28000, quantity: 60, category: 'Bidhaa za Viwandani',
+                    store: 'Ofisi Kuu' },
+                { id: 104, name: 'Caustic Soda Solid 25kg', description: 'Soda kaustiki imara 25kg',
+                    price: 85000, cost: 58000, quantity: 40, category: 'Bidhaa za Viwandani',
+                    store: 'Ofisi Kuu' },
+                { id: 105, name: 'Industrial Caustic Soda Bulk', description: 'Soda kaustiki ya viwandani',
+                    price: 320000, cost: 220000, quantity: 15, category: 'Bidhaa za Viwandani',
+                    store: 'Ofisi Kuu' },
+                { id: 106, name: 'Caustic Soda Solution 50%', description: 'Soda kaustiki suluhisho 50%',
+                    price: 55000, cost: 35000, quantity: 30, category: 'Bidhaa za Viwandani',
+                    store: 'Ofisi Kuu' },
             ];
 
-            // Employee starts with ZERO stock — no products in their store.
-            const allProducts = [...products];
+            // ── Employee starts with ZERO stock (no products in their store) ──
 
+            // ── Sales data (updated to match caustic soda products) ──
             const sales = [
-                { id: 201, productId: 101, quantity: 2, totalPrice: 2400000, date: Date.now() - 86400000 * 2,
-                    customer: 'Juma Hassan', store: 'Duku Kuu', createdBy: 3 },
-                { id: 202, productId: 103, quantity: 5, totalPrice: 175000, date: Date.now() - 86400000 * 1,
-                    customer: 'Aisha Salum', store: 'Duku Kuu', createdBy: 4 },
-                { id: 203, productId: 102, quantity: 3, totalPrice: 255000, date: Date.now() - 86400000 * 3,
-                    customer: 'Omar Khamis', store: 'Duku Kuu', createdBy: 3 },
-                { id: 204, productId: 104, quantity: 1, totalPrice: 450000, date: Date.now() - 86400000 * 4,
-                    customer: 'Zainab Ali', store: 'Duku Kuu', createdBy: 4 },
+                { id: 201, productId: 101, quantity: 2, totalPrice: 360000, date: Date.now() - 86400000 * 2,
+                    customer: 'Juma Hassan', store: 'Ofisi Kuu', createdBy: 3 },
+                { id: 202, productId: 103, quantity: 5, totalPrice: 225000, date: Date.now() - 86400000 * 1,
+                    customer: 'Aisha Salum', store: 'Ofisi Kuu', createdBy: 4 },
+                { id: 203, productId: 102, quantity: 3, totalPrice: 285000, date: Date.now() - 86400000 * 3,
+                    customer: 'Omar Khamis', store: 'Ofisi Kuu', createdBy: 3 },
+                { id: 204, productId: 104, quantity: 1, totalPrice: 85000, date: Date.now() - 86400000 * 4,
+                    customer: 'Zainab Ali', store: 'Ofisi Kuu', createdBy: 4 },
             ];
 
             sales.forEach(s => {
-                const p = allProducts.find(x => x.id === s.productId);
+                const p = products.find(x => x.id === s.productId);
                 if (p) p.quantity -= s.quantity;
             });
 
@@ -3130,7 +3139,7 @@
                 { id: 303, description: 'Mafuta ya gari', amount: 45000, category: 'Transport', date: Date.now() -
                         86400000 * 6, createdBy: 4, store: 'Ofisi Kuu' },
                 { id: 304, description: 'Chakula cha mfanyakazi', amount: 15000, category: 'Other', date: Date.now() -
-                        86400000 * 1, createdBy: 4, store: 'Duku la Mfanyakazi' },
+                        86400000 * 1, createdBy: 4, store: 'Duka la Mfanyakazi' },
             ];
 
             const messages = [
@@ -3154,12 +3163,10 @@
             };
 
             const requests = [];
-            // No pending requests initially
-
             const accountApprovals = [];
 
             DB.set('users', users);
-            DB.set('products', allProducts);
+            DB.set('products', products);
             DB.set('sales', sales);
             DB.set('expenses', expenses);
             DB.set('messages', messages);
@@ -3198,7 +3205,7 @@
 
         function getOwnerProducts() {
             const products = DB.get('products', []);
-            return products.filter(p => p.store === 'Duku Kuu' || p.parentId === undefined);
+            return products.filter(p => p.store === 'Ofisi Kuu' || p.parentId === undefined);
         }
 
         function getStoreName() {
@@ -3292,11 +3299,10 @@
             const products = DB.get('products', []);
             const user = currentUser();
             if (!user) return [];
-            if (user.role === 'owner') return products.filter(p => p.store === 'Duku Kuu' || p.parentId === undefined);
+            if (user.role === 'owner') return products.filter(p => p.store === 'Ofisi Kuu' || p.parentId === undefined);
             if (user.store) {
                 const storeProducts = products.filter(p => p.store === user.store);
                 if (storeProducts.length > 0) return storeProducts;
-                // If employee has no products, return empty array — they start with zero stock.
                 return [];
             }
             return products;
@@ -3360,16 +3366,15 @@
             const product = getProduct(productId);
             if (!product) return { success: false, msg: t('toast_product_not_found') };
 
-            // For employees, product is from owner's store, so parentId is the product itself
             const request = {
                 id: uid(),
                 productId,
                 quantity,
                 requestedBy,
-                store: product.store || 'Duku Kuu',
+                store: product.store || 'Ofisi Kuu',
                 status: 'pending',
                 timestamp: Date.now(),
-                parentId: productId // Keep track of the original product ID
+                parentId: productId
             };
             requests.push(request);
             saveRequests(requests);
@@ -3391,8 +3396,6 @@
                 }
 
                 const products = DB.get('products', []);
-
-                // Get the product from owner's store (the source)
                 const ownerProduct = products.find(p => p.id === req.productId);
                 if (!ownerProduct) {
                     showToast('Bidhaa ya mwenye haipatikani.', 'error');
@@ -3404,16 +3407,13 @@
                     return { success: false };
                 }
 
-                // Decrease owner's stock
                 ownerProduct.quantity -= req.quantity;
                 showToast(t('toast_stock_decreased').replace('{qty}', req.quantity).replace('{product}', ownerProduct
                     .name), 'info');
 
-                // Now add to employee's store — find if product already exists in employee's store
                 const requester = getUser(req.requestedBy);
                 const employeeStore = requester ? requester.store : 'Duka';
 
-                // Check if the product already exists in the employee's store (by name and category)
                 let employeeProduct = products.find(p =>
                     p.name === ownerProduct.name &&
                     p.category === ownerProduct.category &&
@@ -3421,10 +3421,8 @@
                 );
 
                 if (employeeProduct) {
-                    // Product exists, increase quantity
                     employeeProduct.quantity += req.quantity;
                 } else {
-                    // Create a new product entry for the employee's store with the requested quantity
                     const newProduct = {
                         id: uid(),
                         name: ownerProduct.name,
@@ -3434,7 +3432,7 @@
                         quantity: req.quantity,
                         category: ownerProduct.category || 'General',
                         store: employeeStore,
-                        parentId: ownerProduct.id // Link to the owner's product
+                        parentId: ownerProduct.id
                     };
                     products.push(newProduct);
                 }
@@ -3564,9 +3562,6 @@
             };
             users.push(newUser);
             DB.set('users', users);
-
-            // IMPORTANT: New employee starts with ZERO stock.
-            // No products are created for their store. They must request stock from the owner.
 
             const receiptId = 'ACC-' + String(app.id).padStart(6, '0');
             const receipt = {
@@ -4880,7 +4875,6 @@
             const canEdit = ['owner', 'admin', 'accountant'].includes(user.role);
             const canRequest = user && user.role !== 'owner';
 
-            // If employee has zero products, show a friendly empty state with a request button.
             if (user && user.role === 'employee' && products.length === 0) {
                 return `
                             <div class="section-header">
@@ -5543,12 +5537,10 @@
         function openRequestModalForEmployee() {
             const user = currentUser();
             if (!user || user.role === 'owner' || user.role === 'admin') {
-                // For owner/admin, use the regular request modal with their products
                 openModal('request');
                 return;
             }
 
-            // For employees: show products from owner's store
             const overlay = document.getElementById('modalOverlay');
             const box = document.getElementById('modalBox');
             const ownerProducts = getOwnerProducts();
@@ -5861,7 +5853,6 @@
                             </form>
                         `;
             } else if (type === 'request') {
-                // For owner/admin, show products from their store (filtered products)
                 const products = getFilteredProducts();
                 if (data) {
                     html = `
@@ -5915,7 +5906,6 @@
         }
 
         function openRequestModal(productId) {
-            // If employee, use the employee-specific request modal (shows owner's products)
             const user = currentUser();
             if (user && user.role === 'employee') {
                 openRequestModalForEmployee();
@@ -6602,6 +6592,7 @@
         applyTranslations();
 
         console.log('🚀 RB CAUSTIC SODA LTD PRO — Imeboreshwa!');
+        console.log('✅ Bidhaa zote sasa ni za Caustic Soda (badala ya kompyuta).');
         console.log('✅ Wafanyakazi wapya wanaanza na STOCK SIFURI (zero stock).');
         console.log('✅ Wafanyakazi wanaomba stock kutoka kwa Mwenye.');
         console.log('✅ Mwenye anakubali — stock inapungua kwa Mwenye na kuongezeka kwa Mfanyakazi.');
