@@ -1961,6 +1961,29 @@
             background: #0e6b5f !important;
             transform: scale(1.05);
         }
+
+        /* ── Employee zero-stock notice ── */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+        }
+        .empty-state i {
+            font-size: 3rem;
+            opacity: 0.3;
+            margin-bottom: 12px;
+            display: block;
+        }
+        .empty-state h3 {
+            font-size: 1.2rem;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        .empty-state p {
+            font-size: 0.9rem;
+            max-width: 400px;
+            margin: 0 auto 16px;
+        }
     </style>
 </head>
 <body>
@@ -2334,6 +2357,8 @@
                 inventory_th_actions: 'Vitendo',
                 inventory_empty: 'Hakuna bidhaa',
                 inventory_request: 'Omba Stock',
+                inventory_empty_employee: 'Huna bidhaa yoyote kwenye duka lako bado. Omba stock kutoka kwa Mwenye.',
+                inventory_request_btn: 'Omba Stock kutoka kwa Mwenye',
 
                 requests_title: 'Maombi ya Stock',
                 requests_empty: 'Hakuna maombi',
@@ -2580,6 +2605,12 @@
                 receipt_grand_total: 'Jumla Kuu',
                 receipt_efd_note: 'Risiti hii ni halali kwa malipo yote',
                 receipt_share_btn: 'Shiriki Risiti',
+
+                empty_no_products: 'Hakuna bidhaa',
+                request_from_owner: 'Omba kutoka kwa Mwenye',
+                zero_stock_title: 'Huna Stock yoyote bado',
+                zero_stock_desc: 'Kama mfanyakazi, unaweza kuomba stock kutoka kwa Mwenye. Bonyeza kitufe hapa chini kutuma ombi.',
+                zero_stock_btn: 'Omba Stock kutoka kwa Mwenye',
             },
             en: {
                 login_subtitle: 'Login to your system',
@@ -2672,6 +2703,8 @@
                 inventory_th_actions: 'Actions',
                 inventory_empty: 'No products',
                 inventory_request: 'Request Stock',
+                inventory_empty_employee: "You don't have any products in your store yet. Request stock from the Owner.",
+                inventory_request_btn: 'Request Stock from Owner',
 
                 requests_title: 'Stock Requests',
                 requests_empty: 'No requests',
@@ -2918,6 +2951,12 @@
                 receipt_grand_total: 'Grand Total',
                 receipt_efd_note: 'This receipt is valid for all payments',
                 receipt_share_btn: 'Share Receipt',
+
+                empty_no_products: 'No products',
+                request_from_owner: 'Request from Owner',
+                zero_stock_title: "You don't have any stock yet",
+                zero_stock_desc: 'As an employee, you can request stock from the Owner. Click the button below to submit a request.',
+                zero_stock_btn: 'Request Stock from Owner',
             }
         };
 
@@ -3004,7 +3043,7 @@
                 username: 'owner',
                 password: 'owner123',
                 role: 'owner',
-                store: 'Duku Kuu',
+                store: 'Ofisi Kuu',
                 fullName: 'Mwenye Biashara',
                 email: 'owner@biz.com',
                 createdBy: null,
@@ -3016,7 +3055,7 @@
                 username: 'admin',
                 password: 'admin123',
                 role: 'admin',
-                store: 'Duku Kuu',
+                store: 'Ofisi Kuu',
                 fullName: 'Admin Mkuu',
                 email: 'admin@biz.com',
                 createdBy: 1,
@@ -3028,7 +3067,7 @@
                 username: 'accountant',
                 password: 'acc123',
                 role: 'accountant',
-                store: 'Duku Kuu',
+                store: 'Ofisi Kuu',
                 fullName: 'Mhasibu Mkuu',
                 email: 'acc@biz.com',
                 createdBy: 2,
@@ -3040,7 +3079,7 @@
                 username: 'employee',
                 password: 'emp123',
                 role: 'employee',
-                store: 'Duku la Mfanyakazi',
+                store: 'Senta ya Mfanyakazi',
                 fullName: 'Mfanyakazi Alpha',
                 email: 'emp@biz.com',
                 createdBy: 2,
@@ -3050,27 +3089,22 @@
             }, ];
 
             const products = [
-                { id: 101, name: 'Laptop HP Pro', description: 'Laptop ya biashara', price: 1200000, cost: 950000,
-                    quantity: 14, category: 'Elektroniki', store: 'Duku Kuu' },
-                { id: 102, name: 'Keyboard Wireless', description: 'Kibodi bila waya', price: 85000, cost: 55000,
-                    quantity: 32, category: 'Vifaa', store: 'Duku Kuu' },
-                { id: 103, name: 'Mouse Optical', description: 'Panya wa optical', price: 35000, cost: 20000,
-                    quantity: 45, category: 'Vifaa', store: 'Duku Kuu' },
-                { id: 104, name: 'Monitor 24"', description: 'Screen kubwa ya ofisi', price: 450000, cost: 320000,
-                    quantity: 8, category: 'Elektroniki', store: 'Duku Kuu' },
-                { id: 105, name: 'Printer Laser', description: 'Printa ya haraka', price: 680000, cost: 500000,
-                    quantity: 5, category: 'Elektroniki', store: 'Duku Kuu' },
-                { id: 106, name: 'Meza ya Ofisi', description: 'Meza nzuri ya mbao', price: 250000, cost: 180000,
-                    quantity: 12, category: 'Samani', store: 'Duku Kuu' },
+                { id: 101, name: 'Caustic Drops ', description: 'Caustic Soda Drops', price: 1200000, cost: 950000,
+                    quantity: 14, category: 'Industrial Products', store: 'Ofisi Kuu Kuu' },
+                { id: 102, name: 'Caustic Soda Peals', description: 'Caustic Soda Peal', price: 85000, cost: 55000,
+                    quantity: 32, category: 'Vifaa', store: 'Ofisi Kuu' },
+                { id: 103, name: 'Caustic Soda Flakes', description: 'Caustic Soda Flakes', price: 35000, cost: 20000,
+                    quantity: 45, category: 'Vifaa', store: 'Ofisi Kuu' },
+                { id: 104, name: 'Caustic Soda Other Products', description: 'New Products', price: 450000, cost: 320000,
+                    quantity: 8, category: 'Elektroniki', store: 'Ofisi Kuu' },
+                { id: 105, name: 'Caustic soda ', description: 'Other Products', price: 680000, cost: 500000,
+                    quantity: 5, category: 'Elektroniki', store: 'Ofisi Kuu' },
+                { id: 106, name: 'Caustic Soda Flakes', description: 'Other Products', price: 250000, cost: 180000,
+                    quantity: 12, category: 'Industrial Products', store: 'Ofisi Kuu' },
             ];
 
-            const empProducts = [
-                { id: 201, name: 'Laptop HP Pro', description: 'Laptop ya biashara', price: 1200000, cost: 950000,
-                    quantity: 2, category: 'Elektroniki', store: 'Duku la Mfanyakazi', parentId: 101 },
-                { id: 202, name: 'Mouse Optical', description: 'Panya wa optical', price: 35000, cost: 20000,
-                    quantity: 5, category: 'Vifaa', store: 'Duku la Mfanyakazi', parentId: 103 },
-            ];
-            const allProducts = [...products, ...empProducts];
+            // Employee starts with ZERO stock — no products in their store.
+            const allProducts = [...products];
 
             const sales = [
                 { id: 201, productId: 101, quantity: 2, totalPrice: 2400000, date: Date.now() - 86400000 * 2,
@@ -3119,24 +3153,10 @@
                 address: 'Dar es Salaam, Tanzania'
             };
 
-            const requests = [
-                { id: 5001, productId: 201, quantity: 3, requestedBy: 4, store: 'Duku la Mfanyakazi', status: 'pending',
-                    timestamp: Date.now() - 3600000 * 2, parentId: 101 },
-                { id: 5002, productId: 202, quantity: 10, requestedBy: 4, store: 'Duku la Mfanyakazi',
-                    status: 'pending', timestamp: Date.now() - 3600000 * 1, parentId: 103 },
-            ];
+            const requests = [];
+            // No pending requests initially
 
-            const accountApprovals = [{
-                id: 9001,
-                username: 'new_employee',
-                password: 'emp123',
-                fullName: 'Mfanyakazi Mpya',
-                store: 'Duka la Mfanyakazi',
-                role: 'employee',
-                status: 'pending',
-                timestamp: Date.now() - 3600000 * 3,
-                receipt: null
-            }];
+            const accountApprovals = [];
 
             DB.set('users', users);
             DB.set('products', allProducts);
@@ -3175,6 +3195,11 @@
         function getUserByUsername(username) { return DB.get('users', []).find(u => u.username === username); }
 
         function getProduct(id) { return DB.get('products', []).find(p => p.id === id); }
+
+        function getOwnerProducts() {
+            const products = DB.get('products', []);
+            return products.filter(p => p.store === 'Duku Kuu' || p.parentId === undefined);
+        }
 
         function getStoreName() {
             const u = currentUser();
@@ -3271,6 +3296,8 @@
             if (user.store) {
                 const storeProducts = products.filter(p => p.store === user.store);
                 if (storeProducts.length > 0) return storeProducts;
+                // If employee has no products, return empty array — they start with zero stock.
+                return [];
             }
             return products;
         }
@@ -3333,17 +3360,16 @@
             const product = getProduct(productId);
             if (!product) return { success: false, msg: t('toast_product_not_found') };
 
-            const parentId = product.parentId || null;
-
+            // For employees, product is from owner's store, so parentId is the product itself
             const request = {
                 id: uid(),
                 productId,
                 quantity,
                 requestedBy,
-                store: product.store || getStoreName(),
+                store: product.store || 'Duku Kuu',
                 status: 'pending',
                 timestamp: Date.now(),
-                parentId: parentId
+                parentId: productId // Keep track of the original product ID
             };
             requests.push(request);
             saveRequests(requests);
@@ -3366,26 +3392,10 @@
 
                 const products = DB.get('products', []);
 
-                const employeeProduct = products.find(p => p.id === req.productId);
-                if (!employeeProduct) {
-                    showToast(t('toast_product_not_found'), 'error');
-                    return { success: false };
-                }
-
-                let ownerProduct = null;
-                if (req.parentId) {
-                    ownerProduct = products.find(p => p.id === req.parentId);
-                }
+                // Get the product from owner's store (the source)
+                const ownerProduct = products.find(p => p.id === req.productId);
                 if (!ownerProduct) {
-                    ownerProduct = products.find(p =>
-                        p.name === employeeProduct.name &&
-                        p.category === employeeProduct.category &&
-                        p.store === 'Duku Kuu'
-                    );
-                }
-
-                if (!ownerProduct) {
-                    showToast('Bidhaa ya mwenye haipatikani. Ombi halikubaliwa.', 'error');
+                    showToast('Bidhaa ya mwenye haipatikani.', 'error');
                     return { success: false };
                 }
 
@@ -3394,11 +3404,40 @@
                     return { success: false };
                 }
 
+                // Decrease owner's stock
                 ownerProduct.quantity -= req.quantity;
                 showToast(t('toast_stock_decreased').replace('{qty}', req.quantity).replace('{product}', ownerProduct
                     .name), 'info');
 
-                employeeProduct.quantity += req.quantity;
+                // Now add to employee's store — find if product already exists in employee's store
+                const requester = getUser(req.requestedBy);
+                const employeeStore = requester ? requester.store : 'Duka';
+
+                // Check if the product already exists in the employee's store (by name and category)
+                let employeeProduct = products.find(p =>
+                    p.name === ownerProduct.name &&
+                    p.category === ownerProduct.category &&
+                    p.store === employeeStore
+                );
+
+                if (employeeProduct) {
+                    // Product exists, increase quantity
+                    employeeProduct.quantity += req.quantity;
+                } else {
+                    // Create a new product entry for the employee's store with the requested quantity
+                    const newProduct = {
+                        id: uid(),
+                        name: ownerProduct.name,
+                        description: ownerProduct.description || '',
+                        price: ownerProduct.price,
+                        cost: ownerProduct.cost,
+                        quantity: req.quantity,
+                        category: ownerProduct.category || 'General',
+                        store: employeeStore,
+                        parentId: ownerProduct.id // Link to the owner's product
+                    };
+                    products.push(newProduct);
+                }
 
                 DB.set('products', products);
 
@@ -3407,7 +3446,7 @@
 
                 const msg = t('toast_request_approved_stock')
                     .replace('{qty}', req.quantity)
-                    .replace('{product}', employeeProduct.name);
+                    .replace('{product}', ownerProduct.name);
                 showToast(msg, 'success');
 
                 updateRequestBadge();
@@ -3526,6 +3565,9 @@
             users.push(newUser);
             DB.set('users', users);
 
+            // IMPORTANT: New employee starts with ZERO stock.
+            // No products are created for their store. They must request stock from the owner.
+
             const receiptId = 'ACC-' + String(app.id).padStart(6, '0');
             const receipt = {
                 id: receiptId,
@@ -3549,7 +3591,7 @@
                     id: uid(),
                     from: owner.id,
                     to: newUser.id,
-                    text: `🎉 Akaunti yako imekubaliwa! Sasa unaweza kuingia kwenye mfumo. Karibu ${newUser.fullName}!`,
+                    text: `🎉 Akaunti yako imekubaliwa! Sasa unaweza kuingia kwenye mfumo. Karibu ${newUser.fullName}! Kumbuka: huna stock bado — omba stock kutoka kwa Mwenye.`,
                     isTask: false,
                     timestamp: Date.now(),
                     read: false
@@ -3852,7 +3894,7 @@
         }
 
         // ================================================================
-        //  EFD RECEIPT FUNCTIONS — FULLY WORKING
+        //  EFD RECEIPT FUNCTIONS
         // ================================================================
 
         let currentReceiptData = null;
@@ -3995,20 +4037,17 @@
             currentReceiptData = null;
         }
 
-        // ── Print Receipt ──
         function printReceipt() {
             if (!currentReceiptData) {
                 showToast('Hakuna risiti ya kuchapisha.', 'error');
                 return;
             }
             showToast(t('toast_receipt_print'), 'info');
-            // Use setTimeout to allow the toast to show before print dialog
             setTimeout(function() {
                 window.print();
             }, 300);
         }
 
-        // ── Send Receipt via WhatsApp ──
         function sendReceiptWhatsApp() {
             if (!currentReceiptData) {
                 showToast(t('toast_error'), 'error');
@@ -4039,7 +4078,6 @@
             }, 500);
         }
 
-        // ── Setup receipt modal event listeners ──
         document.addEventListener('DOMContentLoaded', function() {
             const printBtn = document.getElementById('printReceiptBtn');
             const sendBtn = document.getElementById('sendReceiptWhatsAppBtn');
@@ -4837,15 +4875,38 @@
 
         // ── INVENTORY ──
         views.inventory = function() {
-            const products = getFilteredProducts();
             const user = currentUser();
+            const products = getFilteredProducts();
             const canEdit = ['owner', 'admin', 'accountant'].includes(user.role);
             const canRequest = user && user.role !== 'owner';
+
+            // If employee has zero products, show a friendly empty state with a request button.
+            if (user && user.role === 'employee' && products.length === 0) {
+                return `
+                            <div class="section-header">
+                                <h2><i class="fas fa-boxes" style="color:var(--accent-4)"></i> ${t('inventory_title')}</h2>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="empty-state">
+                                        <i class="fas fa-box-open" style="font-size:4rem;opacity:0.2;"></i>
+                                        <h3>${t('zero_stock_title')}</h3>
+                                        <p>${t('zero_stock_desc')}</p>
+                                        <button class="btn btn-primary btn-icon" onclick="openRequestModalForEmployee()">
+                                            <i class="fas fa-hand-holding"></i> ${t('zero_stock_btn')}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+            }
 
             return `
                         <div class="section-header">
                             <h2><i class="fas fa-boxes" style="color:var(--accent-4)"></i> ${t('inventory_title')}</h2>
                             ${canEdit ? `<button class="btn btn-primary btn-icon" onclick="openModal('product')"><i class="fas fa-plus"></i> ${t('inventory_add')}</button>` : ''}
+                            ${canRequest ? `<button class="btn btn-primary btn-icon" onclick="openRequestModalForEmployee()"><i class="fas fa-hand-holding"></i> ${t('inventory_request')}</button>` : ''}
                         </div>
 
                         <div class="card">
@@ -5478,6 +5539,82 @@
             applyTranslations();
         }
 
+        // ── Employee request modal (shows products from owner's store) ──
+        function openRequestModalForEmployee() {
+            const user = currentUser();
+            if (!user || user.role === 'owner' || user.role === 'admin') {
+                // For owner/admin, use the regular request modal with their products
+                openModal('request');
+                return;
+            }
+
+            // For employees: show products from owner's store
+            const overlay = document.getElementById('modalOverlay');
+            const box = document.getElementById('modalBox');
+            const ownerProducts = getOwnerProducts();
+
+            if (ownerProducts.length === 0) {
+                showToast('Hakuna bidhaa katika stock ya Mwenye kwa sasa.', 'warning');
+                return;
+            }
+
+            let html = `
+                        <h3><i class="fas fa-hand-holding"></i> ${t('request_modal_title')}</h3>
+                        <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:16px;">
+                            <i class="fas fa-info-circle"></i> Omba stock kutoka kwa Mwenye. Bidhaa zifuatazo zinapatikana kwa Mwenye.
+                        </p>
+                        <form id="modalForm" onsubmit="submitEmployeeRequest(event)">
+                            <div class="form-group">
+                                <label>${t('request_modal_product')}</label>
+                                <select name="productId" required>
+                                    <option value="">-- ${t('request_modal_product')} --</option>
+                                    ${ownerProducts.map(p => `<option value="${p.id}">${p.name} (Stock: ${p.quantity})</option>`).join('')}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>${t('request_modal_quantity')}</label>
+                                <input type="number" name="quantity" min="1" value="1" required />
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary" onclick="closeModal()">${t('modal_cancel')}</button>
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> ${t('request_modal_submit')}</button>
+                            </div>
+                        </form>
+                    `;
+
+            box.innerHTML = html;
+            overlay.classList.add('show');
+            document.body.classList.add('modal-open');
+            applyTranslations();
+        }
+
+        // ── Submit employee request ──
+        function submitEmployeeRequest(e) {
+            e.preventDefault();
+            const fd = new FormData(e.target);
+            const productId = parseInt(fd.get('productId'));
+            const quantity = parseInt(fd.get('quantity'));
+
+            if (!productId || !quantity || quantity < 1) {
+                showToast(t('toast_fill_fields'), 'error');
+                return;
+            }
+
+            const user = currentUser();
+            if (!user) return;
+
+            const result = createRequest(productId, quantity, user.id);
+            if (!result.success) {
+                showToast(result.msg || t('toast_error'), 'error');
+                return;
+            }
+
+            closeModal();
+            showToast(t('toast_request_sent'), 'success');
+            updateRequestBadge();
+            navigate('inventory');
+        }
+
         // ================================================================
         //  NAVIGATION
         // ================================================================
@@ -5724,6 +5861,7 @@
                             </form>
                         `;
             } else if (type === 'request') {
+                // For owner/admin, show products from their store (filtered products)
                 const products = getFilteredProducts();
                 if (data) {
                     html = `
@@ -5777,6 +5915,12 @@
         }
 
         function openRequestModal(productId) {
+            // If employee, use the employee-specific request modal (shows owner's products)
+            const user = currentUser();
+            if (user && user.role === 'employee') {
+                openRequestModalForEmployee();
+                return;
+            }
             openModal('request', productId);
         }
 
@@ -6458,7 +6602,9 @@
         applyTranslations();
 
         console.log('🚀 RB CAUSTIC SODA LTD PRO — Imeboreshwa!');
-        console.log('✅ Watu wote (isipokuwa owner) wanaweza kuomba stock.');
+        console.log('✅ Wafanyakazi wapya wanaanza na STOCK SIFURI (zero stock).');
+        console.log('✅ Wafanyakazi wanaomba stock kutoka kwa Mwenye.');
+        console.log('✅ Mwenye anakubali — stock inapungua kwa Mwenye na kuongezeka kwa Mfanyakazi.');
         console.log('🖨️ Risiti inachapishwa na kutumwa WhatsApp bila makosa.');
         console.log('💬 Chat: Sender = #128C7E, Receiver = white/grey');
         console.log('🧾 Receipt: Muundo wa EFD na VAT 18%.');
@@ -6467,6 +6613,7 @@
         console.log('✅ Stock Request: Owner stock inapungua, employee stock inaongezeka.');
         console.log('✅ Account Approvals: Wafanyakazi wapya wanaomba akaunti, Mwenye anakubali/kataa.');
         console.log('✅ Receipt Button: Inafanya kazi kikamilifu — chapisha na tuma WhatsApp.');
+        console.log('✅ Employee zero-stock page: inaonekana wakati mfanyakazi hana bidhaa yoyote.');
 
         // ================================================================
         //  GLOBAL EXPOSURE
@@ -6475,6 +6622,8 @@
         window.openModal = openModal;
         window.closeModal = closeModal;
         window.openRequestModal = openRequestModal;
+        window.openRequestModalForEmployee = openRequestModalForEmployee;
+        window.submitEmployeeRequest = submitEmployeeRequest;
         window.submitSale = submitSale;
         window.submitProduct = submitProduct;
         window.submitExpense = submitExpense;
